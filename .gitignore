@@ -1,5 +1,9 @@
 ﻿data/raw/
 .env
+data/processed/
+data.zip
+# Local reference-containing review maps; regenerate from scripts.
+results/maps/
 *.key
 *.pem
 *.pkl
@@ -9,3 +13,4 @@ __pycache__/
 .ipynb_checkpoints/
 venv/
 .venv/
+.venv_compat/
