@@ -1,0 +1,12 @@
+{
+  "trial": 1,
+  "validation_top1": 0.7081620021399406,
+  "parameters": {
+    "max_depth": 16,
+    "min_samples_leaf": 16,
+    "max_features": 0.5
+  },
+  "complete_trials": 8,
+  "pruned_trials": 2,
+  "duplicate_proposals": 1
+}

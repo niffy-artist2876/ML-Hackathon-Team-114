@@ -14,6 +14,8 @@ for the validation and held-out scores.
 | HistGradientBoosting | 70.30% | 80.65% | 0.965 | **0.559** | 88.34% | [Section](#phase-4-histgradientboosting) |
 | MLP | 70.22% | 81.44% | **0.921** | 0.585 | 89.67% | [Section](#phase-4-mlp-and-svm) |
 | SVM | 69.19% | 77.09% | 1.194 | 0.864 | 89.38% | [Section](#phase-4-mlp-and-svm) |
+| Random Forest, Bayesian-tuned | 70.82% | 82.03% | 0.926 | 0.651 | 90.34% | [Section](#phase-5-random-forest-tuning) |
+| Random Forest, Bayesian-tuned + HMM | 67.70% | 84.78% | — | — | 96.48% | [Section](#phase-6-hmmviterbi-decoding) |
 | ExtraTrees, Bayesian-tuned, classifier only¹ | 74.10% ± 4.44 | 77.88% | — | — | 86.26% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
 | ExtraTrees, Bayesian-tuned + HMM decoding¹ | — | 78.71% | — | — | 97.83% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
 
@@ -419,3 +421,97 @@ python scripts/run_api.py
 Open `ui/index.html` in a browser after the API has started. Set the API URL
 when the UI and API run on separate laptops. The API returns predicted arc IDs
 and aggregate metrics only; reference route data remains server-side.
+
+## Phase 5 Random Forest tuning
+
+The Optuna TPE study searches tree depth, minimum leaf size, and the number of
+features considered at each split. It starts by repeating the original Random
+Forest configuration on the same five trip folds. Each complete trial's
+objective is total correct arc picks divided by total validation GPS points.
+The sampler, preprocessing, and 100-tree budget stay fixed. Weak trials may
+be pruned after at least three folds. The search reads the training partition.
+
+Run the following from the repository root after building the processed tables.
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements-tuning.txt
+.venv\Scripts\python.exe scripts/tune_random_forest.py --trials 10
+.venv\Scripts\python.exe scripts/train_random_forest.py --config results/random_forest_tuning/tuned_config.json
+```
+
+The tuning script checkpoints trials in a local journal and exports a trial CSV
+and the selected configuration. The refit command runs all five folds again
+to save out-of-fold scores, fits on all 80 training trips, and scores the ten
+student-test trips. It writes to `results/random_forest_tuning/evaluation/` and
+saves the model at `models/random_forest_tuned/model.joblib`. Git LFS stores
+the published model and candidate score tables. Run `git lfs pull` to download
+them if the checkout contains pointer files.
+
+This pass evaluated ten distinct settings. Eight finished all five folds and
+two were pruned. One interrupted duplicate and one skipped duplicate are
+also recorded in the trial log. The best setting used `max_depth=16`,
+`min_samples_leaf=16`, and `max_features=0.5`. It raised validation Top-1
+from 70.58% to 70.82% with the same 100 trees.
+See the [trial log](results/random_forest_tuning/trials.csv) and
+[selected configuration](results/random_forest_tuning/tuned_config.json).
+
+| Random Forest | Validation Top-1 | Validation point log loss | Student-test Top-1 |
+| --- | ---: | ---: | ---: |
+| Original | 70.58% | 1.266 | 82.06% |
+| Tuned | 70.82% | 0.926 | 82.03% |
+
+The tuned forest gained 491 correct validation picks and made six fewer
+correct student-test picks than the original forest.
+
+## Phase 6 HMM/Viterbi decoding
+
+The hidden states are candidate arc IDs at each GPS point. The tuned Random
+Forest's log candidate scores serve as emissions. A transition compares
+projected GPS displacement with the shortest directed road distance between
+the two candidate projections, including any intermediate arcs. The Viterbi
+decoder penalizes the absolute distance difference scaled by `beta_m`.
+It starts a new segment at long GPS gaps and when all incoming paths are
+unreachable. Points with no candidates retain their original index.
+
+```powershell
+.venv\Scripts\python.exe scripts/evaluate_hmm.py
+```
+
+The evaluator selects `beta_m` on the out-of-fold training scores and applies
+that value to student test. It reports point-weighted Top-1, exact trip
+matches, direct arc continuity, bounded directed reachability, and restart
+counts in `results/hmm/`. The classifier-only and HMM predictions use
+identical candidate rows and reference labels. The decoder itself takes
+candidate scores and geometry, and the evaluator uses labels to grade its path.
+
+### HMM results
+
+The out-of-fold search selected `beta_m=80`. The student-test run used that
+fixed value.
+
+| Split and decoder | Point-weighted Top-1 | Mean trip Top-1 | Direct route continuity | Bounded directed reachability |
+| --- | ---: | ---: | ---: | ---: |
+| Validation, tuned classifier | 70.82% | 80.29% | 90.33% | 91.38% |
+| Validation, tuned classifier + HMM | 67.70% | 80.45% | 95.80% | 99.96% |
+| Student test, tuned classifier | 82.03% | 83.86% | 90.34% | 95.52% |
+| Student test, tuned classifier + HMM | 84.78% | 86.76% | 96.48% | 99.97% |
+
+Direct continuity counts consecutive arcs that are the same or share the
+correct directed endpoint. Bounded reachability also counts transitions
+connected by intermediate arcs within 300 metres. Both rates exclude marked
+GPS gaps. The decoder restarted at 87 unreachable validation transitions and
+five unreachable student-test transitions, and produced an arc for every
+point in these runs.
+
+The HMM gained 528 correct picks on student test and improved eight of its
+ten trips. On validation it improved 57 of 80 trips, but losses on a few trips
+outweighed those gains in the point-weighted score. Trips `00000021`,
+`00000082`, and `00000084` lost 8,631 correct picks combined. The reference arc
+was available for all but three of their observations, so candidate misses
+cannot explain most of those losses. The HMM produced more connected paths,
+with point-level accuracy varying by trip.
+
+- [Decoder comparison](results/hmm/decoder_comparison.csv)
+- [Per-trip results](results/hmm/decoder_by_trip.csv)
+- [Validation search for beta](results/hmm/beta_search.csv)
+- [Selected decoder configuration](results/hmm/decoder_config.json)

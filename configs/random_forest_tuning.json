@@ -1,0 +1,13 @@
+{
+  "baseline_config": "configs/random_forest.json",
+  "output_dir": "results/random_forest_tuning",
+  "seed": 42,
+  "trials": 15,
+  "startup_trials": 5,
+  "prune_after_folds": 3,
+  "search_space": {
+    "max_depth": [null, 16, 24, 32],
+    "min_samples_leaf": [2, 4, 8, 16],
+    "max_features": ["sqrt", 0.5, 0.8]
+  }
+}

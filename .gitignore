@@ -18,6 +18,9 @@ results/random_forest/*_predictions.parquet
 results/hist_gradient_boosting/*_predictions.parquet
 results/mlp/*_predictions.parquet
 results/svm/*_predictions.parquet
+results/random_forest_tuning/*.journal*
+results/random_forest_tuning/evaluation/*_predictions.parquet
+results/hmm/*_paths.parquet
 *.zip
 *.pdf
 __pycache__/
