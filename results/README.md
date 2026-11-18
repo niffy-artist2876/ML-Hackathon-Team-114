@@ -30,3 +30,22 @@ handoff.
 - `evaluation/distance_baseline_by_trip.csv`: per-trip distance-only scores.
 - `evaluation/distance_baseline_summary.csv`: partition-level aggregates.
 - `evaluation/run_config.json`: score method and metric configuration.
+
+## Phase 4 Random Forest outputs
+
+- `random_forest/cv_by_fold.csv`: fold sizes and training/inference timings.
+- `random_forest/cv_by_trip.csv`: held-out metrics for each validation trip.
+- `random_forest/cv_summary.csv`: pooled and trip-mean cross-validation metrics.
+- `random_forest/train_fit_summary.csv`: in-sample final-fit metrics used to
+  inspect overfitting against cross-validation.
+- `random_forest/student_test_by_trip.csv`: held-out metrics per student-test
+  trip.
+- `random_forest/student_test_summary.csv`: final student-test metrics.
+- `random_forest/comparison_row.csv`: model-comparison table row.
+- `random_forest/feature_importance.csv`: final model feature importances.
+- `random_forest/run_metadata.json`: configuration, fold IDs, row counts, and
+  output inventory.
+
+The three `*_predictions.parquet` files contain candidate-level probabilities
+and selected arcs. They are generated artifacts and can be regenerated with
+`scripts/train_random_forest.py`.
