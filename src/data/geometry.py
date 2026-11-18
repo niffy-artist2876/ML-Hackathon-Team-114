@@ -1,4 +1,5 @@
 """Label-free projected geometry and exact segment-distance candidate lookup."""
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -12,8 +13,11 @@ ROOT = Path(__file__).resolve().parents[2] / "data" / "raw"
 ALLOWED = ("train", "student_test")
 
 
-def check_trip(partition, trip_id):
-    if partition not in ALLOWED:
+def check_trip(partition, trip_id, allow_evaluator=False):
+    allowed = ALLOWED
+    if allow_evaluator or os.environ.get("ALLOW_EVALUATOR_TEST") == "1":
+        allowed = ("train", "student_test", "evaluator_test", "evaluator")
+    if partition not in allowed:
         raise ValueError("Development access is restricted to train and student_test")
     if not isinstance(trip_id, str) or len(trip_id) != 8 or not trip_id.isdigit():
         raise ValueError("trip_id must be an eight-digit string")

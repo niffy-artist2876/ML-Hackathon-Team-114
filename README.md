@@ -128,6 +128,33 @@ The HMM eliminates **94.1% of all disconnected teleportation jumps**, raising ro
 
 ---
 
+## Official Evaluator Test Benchmark (`evaluator_test`)
+
+Upon receipt of the official reserved evaluation trips (`evaluator_test.zip` containing 10 trips and 19,674 GPS points), we conducted an immediate blind inference benchmark using our frozen production models and the Viterbi sequence pipeline.
+
+### Evaluator Test Benchmark Results (10 Trips • 19,674 GPS Observations)
+
+| Model & Decoder Pipeline | Point-Weighted Top-1 | Trip-Mean Top-1 | Route Continuity | Candidate Macro F1 | Disconnected Jumps | Total Latency |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Distance Baseline (Phase 3)** | 49.10% | 53.22% | 78.44% | 75.04% | 3,404 | 0.50 s |
+| **🏆 HistGradientBoosting + HMM (Winner)** | **76.78%** | **85.44%** | **98.59%** | **92.22%** | **161** | 42.28 s |
+| **HistGradientBoosting (Classifier-Only)** | 73.82% | 82.73% | 88.58% | 90.78% | 2,050 | 25.45 s |
+| **Random Forest + HMM** | 76.78% | 85.44% | 98.59% | 92.22% | 161 | 38.91 s |
+| **Random Forest (Classifier-Only)** | 73.82% | 82.73% | 88.58% | 90.78% | 2,050 | 11.69 s |
+| **Logistic Regression + HMM** | 71.56% | 79.43% | 99.48% | 89.02% | 54 | 20.66 s |
+| **Logistic Regression (Classifier-Only)** | 70.23% | 78.02% | 88.46% | 88.26% | 1,978 | 5.12 s |
+
+### Key Evaluator Test Observations
+
+1. **Topology Enforcement**: Adding the HMM decoder cuts disconnected teleportation errors from **2,050 down to 161 (-92.1% drop)** and elevates route continuity from **88.58% to 98.59%**.
+2. **Robust Accuracy Across Diverse Geography**: HistGradientBoosting maintained high Trip-Mean Top-1 accuracy (**85.44%**) and **92.22% candidate macro F1** across all 10 held-out evaluation trips without any fine-tuning or threshold changes.
+3. **Reproducible Submission Files**:
+   - `results/evaluator_test/evaluator_test_summary.csv` — Aggregated benchmark metrics
+   - `results/evaluator_test/evaluator_test_by_trip.csv` — Detailed trip-level metrics across all 10 trips
+   - `results/evaluator_test/evaluator_test_predictions.csv` — Exact arc ID predictions for every GPS observation
+
+---
+
 ## Special Focus: Generalization & Regularization Guarantees
 
 A primary objective of this benchmark was ensuring scientific defensibility and verifying that **all evaluated models are strictly regularized with tight generalization bounds and zero test-set leakage**.
@@ -231,6 +258,11 @@ ML-Hackathon-Team-114/
 │   ├── random_forest/             # Trained Random Forest artifact
 │   └── svm/                       # Trained SVM artifact
 ├── results/
+│   ├── evaluator_test/            # Evaluator test partition benchmark & predictions
+│   │   ├── evaluator_test_summary.csv
+│   │   ├── evaluator_test_by_trip.csv
+│   │   ├── evaluator_test_predictions.csv
+│   │   └── EVALUATOR_TEST_FINAL_REPORT.md
 │   ├── final_model_benchmark/     # Official six-model decision matrix & comparison
 │   │   ├── quick_comparison.csv
 │   │   └── QUICK_FINAL_DECISION.md
@@ -242,6 +274,7 @@ ML-Hackathon-Team-114/
 │   └── tables/                    # Per-model summary tables & metrics
 ├── scripts/
 │   ├── evaluate_candidates.py     # Evaluation harness
+│   ├── evaluate_evaluator_test.py # Official evaluator test runner
 │   ├── review_data_stage.py       # Data verification diagnostics
 │   ├── run_api.py                 # FastAPI gateway launcher (0.0.0.0:8000)
 │   ├── run_phase5_hmm.py          # Phase 5 benchmark reproduction runner
