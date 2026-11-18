@@ -9,6 +9,8 @@ results/maps/
 *.pkl
 *.joblib
 *.h5
+*.zip
+*.pdf
 __pycache__/
 .ipynb_checkpoints/
 venv/
