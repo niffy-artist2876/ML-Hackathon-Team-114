@@ -1,0 +1,67 @@
+{
+  "config": {
+    "schema_version": 1,
+    "model": "hist_gradient_boosting",
+    "algorithm_family": "histogram_gradient_boosting",
+    "folds_path": "results/tables/train_trip_folds.csv",
+    "model_parameters": {
+      "loss": "log_loss",
+      "max_iter": 100,
+      "learning_rate": 0.1,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 20,
+      "early_stopping": false,
+      "random_state": 42
+    },
+    "max_negative_candidates_per_point": 4,
+    "outputs": {
+      "directory": "results/hist_gradient_boosting",
+      "model_path": "models/hist_gradient_boosting/model.joblib"
+    }
+  },
+  "resolved_feature_columns": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "train_trips": 80,
+  "student_test_trips": 10,
+  "train_candidate_rows_before_sampling": 3334672,
+  "train_candidate_rows_used": 1028760,
+  "max_negative_candidates_per_point": 4,
+  "fold_ids": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "versions": {
+    "scikit_learn": "1.9.1",
+    "pandas": "3.0.6"
+  },
+  "model_path": "models/hist_gradient_boosting/model.joblib",
+  "outputs": [
+    "comparison_row.csv",
+    "cv_by_fold.csv",
+    "cv_by_trip.csv",
+    "cv_predictions.parquet",
+    "cv_summary.csv",
+    "student_test_by_trip.csv",
+    "student_test_predictions.parquet",
+    "student_test_summary.csv",
+    "train_fit_by_trip.csv",
+    "train_fit_predictions.parquet",
+    "train_fit_summary.csv"
+  ]
+}

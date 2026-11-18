@@ -207,3 +207,57 @@ the comparison table.
 - [Distance baseline](results/evaluation/distance_baseline_summary.csv) and [team comparison row](results/random_forest/comparison_row.csv).
 - [Validation by trip](results/random_forest/cv_by_trip.csv), [student test by trip](results/random_forest/student_test_by_trip.csv), [fold timings](results/random_forest/cv_by_fold.csv), and [full feature importance](results/random_forest/feature_importance.csv).
 - [Saved model and loading instructions](models/random_forest/README.md).
+
+## Phase 4 HistGradientBoosting
+
+This candidate classifier uses the same 13 features, five fixed trip folds,
+fold-fitted median imputation, and training-only negative sampling as the
+Random Forest run. The baseline fits 100 boosting rounds with binary log loss,
+a learning rate of 0.1, and at most 31 leaves per tree. Early stopping is
+disabled so validation stays at the trip level. See the
+[training configuration](configs/hist_gradient_boosting.json).
+
+After generating the processed data, run from the repository root.
+
+```powershell
+.venv\Scripts\python.exe -m unittest discover -s tests -v
+.venv\Scripts\python.exe scripts/train_hist_gradient_boosting.py
+```
+
+To check one fold without fitting a final model or evaluating student-test
+trips, specify a separate output directory.
+
+```powershell
+.venv\Scripts\python.exe scripts/train_hist_gradient_boosting.py --fold 0 --output-dir ../tmp/pathsnap-hgb-smoke-fold-0
+```
+
+The complete run writes the fitted pipeline to
+`models/hist_gradient_boosting/model.joblib` and the metrics and scored candidate
+tables to `results/hist_gradient_boosting/`. Each point gets one selected arc.
+The candidate predictions include `hgb_probability` and `score`, with scores
+stored as log probabilities for the shared evaluator.
+The prediction tables are stored with Git LFS. Run `git lfs pull` to download
+them if the checkout contains pointer files.
+
+### HistGradientBoosting results
+
+The fixed configuration was validated on five whole-trip folds and refitted
+on all 80 training trips before scoring the 10 student-test trips.
+
+| Metric | Train fit | 5-fold validation | Student test |
+| --- | ---: | ---: | ---: |
+| Point-weighted Top-1 | 76.32% | 70.30% | 80.65% |
+| Mean trip candidate Macro F1 | 90.12% | 89.27% | 90.80% |
+| Point log loss | 0.521 | 0.965 | 0.559 |
+| Route continuity | 89.07% | 89.48% | 88.34% |
+| Candidate miss rate | 6.39% | 6.39% | 0.08% |
+
+The Random Forest scored higher on Top-1 for validation (70.58%) and
+student test (82.06%). HistGradientBoosting had lower point log loss on both
+splits and its five fold fits took 22.60 s in this run. Candidate misses are
+shared by both models because they use the same candidates.
+
+- [Team comparison row](results/hist_gradient_boosting/comparison_row.csv)
+- [Validation by fold](results/hist_gradient_boosting/cv_by_fold.csv)
+- [Validation summary](results/hist_gradient_boosting/cv_summary.csv)
+- [Student-test summary](results/hist_gradient_boosting/student_test_summary.csv)

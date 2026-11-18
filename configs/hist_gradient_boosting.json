@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "model": "hist_gradient_boosting",
+  "algorithm_family": "histogram_gradient_boosting",
+  "folds_path": "results/tables/train_trip_folds.csv",
+  "model_parameters": {
+    "loss": "log_loss",
+    "max_iter": 100,
+    "learning_rate": 0.1,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 20,
+    "early_stopping": false,
+    "random_state": 42
+  },
+  "max_negative_candidates_per_point": 4,
+  "outputs": {
+    "directory": "results/hist_gradient_boosting",
+    "model_path": "models/hist_gradient_boosting/model.joblib"
+  }
+}

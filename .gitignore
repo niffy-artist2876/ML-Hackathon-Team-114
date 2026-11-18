@@ -11,6 +11,7 @@ results/maps/
 *.h5
 # Large Phase 4 candidate-level prediction matrices; summaries remain tracked.
 results/random_forest/*_predictions.parquet
+results/hist_gradient_boosting/*_predictions.parquet
 __pycache__/
 .ipynb_checkpoints/
 venv/
