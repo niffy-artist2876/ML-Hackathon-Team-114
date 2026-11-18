@@ -1,0 +1,19 @@
+{
+  "model": "extra_trees",
+  "objective": "mean_grouped_validation_top1_accuracy",
+  "trials": 8,
+  "training_trips": 80,
+  "full_candidate_rows": 2837039,
+  "sampled_training_rows": 988728,
+  "negative_per_point": 4,
+  "best_value": 0.7409948463025479,
+  "best_params": {
+    "n_estimators": 50,
+    "max_depth": 20,
+    "min_samples_leaf": 2,
+    "max_features": 0.5,
+    "criterion": "gini"
+  },
+  "final_fit_seconds": 6.961360899997089,
+  "artifact": "results\\models\\final_extra_trees.joblib"
+}
