@@ -1,0 +1,2 @@
+partition,trips,points,covered_points,candidate_miss_rate,top1_accuracy,trip_mean_top1_accuracy,trip_mean_candidate_macro_f1,point_mean_log_loss,route_continuity,trip_mean_route_continuity,mean_selected_rank
+cross_validation,80,208417,195092,0.06393432397549144,0.691906130497992,0.7824015954981882,0.8857107471141903,1.1941958541686508,0.8848406956538482,0.8688594450454591,1.3787393038760192

@@ -1,0 +1,9 @@
+models/random_forest/random_forest_compressed9.joblib filter=lfs diff=lfs merge=lfs -text
+results/random_forest/*_predictions.parquet filter=lfs diff=lfs merge=lfs -text
+results/hist_gradient_boosting/*_predictions.parquet filter=lfs diff=lfs merge=lfs -text
+models/mlp/mlp_compressed9.joblib filter=lfs diff=lfs merge=lfs -text
+models/svm/svm_compressed9.joblib filter=lfs diff=lfs merge=lfs -text
+results/mlp/*_predictions.parquet filter=lfs diff=lfs merge=lfs -text
+results/svm/*_predictions.parquet filter=lfs diff=lfs merge=lfs -text
+models/random_forest_tuned/model.joblib filter=lfs diff=lfs merge=lfs -text
+results/random_forest_tuning/evaluation/*_predictions.parquet filter=lfs diff=lfs merge=lfs -text

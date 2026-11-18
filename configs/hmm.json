@@ -1,0 +1,9 @@
+{
+  "score_directory": "results/random_forest_tuning/evaluation",
+  "output_directory": "results/hmm",
+  "fold_file": "results/tables/train_trip_folds.csv",
+  "max_gap_s": 10.0,
+  "max_route_m": 300.0,
+  "backward_jitter_m": 3.0,
+  "beta_grid_m": [10.0, 20.0, 40.0, 80.0, 160.0]
+}
