@@ -262,6 +262,112 @@ shared by both models because they use the same candidates.
 - [Validation summary](results/hist_gradient_boosting/cv_summary.csv)
 - [Student-test summary](results/hist_gradient_boosting/student_test_summary.csv)
 
+## Phase 4 MLP and SVM
+
+The MLP and SVM score each candidate arc using the same 13 shared features,
+trip-level folds, training-only negative sampling, and Phase 3 evaluator as the
+Random Forest and HistGradientBoosting. Both pipelines fit median imputation and
+standard scaling on each training split only.
+
+- **MLP:** two hidden layers (64 and 32 ReLU units), Adam with batch size 512, L2 penalty 0.0001, and early stopping on a 10% split of the training rows.
+- **SVM:** a Nystroem approximation of the RBF kernel (100 components, gamma 0.1) followed by a linear SVM (C=1.0, balanced class weights). An exact kernel SVM is impractical on about a million candidate rows. Sigmoid (Platt) calibration with 3 internal folds converts SVM margins into probabilities for the log-loss metric.
+
+The final fits retained all positive rows and up to 4 negatives per point, using 1,028,760 of 3,334,672 training candidate rows. Evaluation used the full candidate sets.
+
+### MLP and SVM results
+
+**The MLP reached 70.22% Top-1 in five-fold trip-level validation and 81.44% on the held-out student test. The SVM reached 69.19% and 77.09%.**
+
+| MLP metric | Train fit | 5-fold validation | Student test |
+| --- | ---: | ---: | ---: |
+| Correct top-1 picks | 157,776 | 146,348 | 15,603 |
+| **Point-weighted Top-1** | **75.70%** | **70.22%** | **81.44%** |
+| Mean trip Top-1 | 80.75% | 79.50% | 83.12% |
+| Mean trip candidate Macro F1 | 90.00% | 89.24% | 91.01% |
+| Point log loss | 0.564 | 0.921 | 0.585 |
+| Route continuity | 89.57% | 89.74% | 89.67% |
+| Mean trip route continuity | 88.11% | 87.90% | 89.35% |
+| Mean selected candidate rank | 1.44 | 1.39 | 1.39 |
+
+The MLP train-fit Top-1 exceeds validation by 5.48 percentage points.
+
+| SVM metric | Train fit | 5-fold validation | Student test |
+| --- | ---: | ---: | ---: |
+| Correct top-1 picks | 149,739 | 144,205 | 14,771 |
+| **Point-weighted Top-1** | **71.85%** | **69.19%** | **77.09%** |
+| Mean trip Top-1 | 78.37% | 78.24% | 79.72% |
+| Mean trip candidate Macro F1 | 88.70% | 88.57% | 89.20% |
+| Point log loss | 0.848 | 1.194 | 0.864 |
+| Route continuity | 87.08% | 88.48% | 89.38% |
+| Mean trip route continuity | 86.80% | 86.89% | 89.17% |
+| Mean selected candidate rank | 1.42 | 1.38 | 1.36 |
+
+The SVM train-fit Top-1 exceeds validation by 2.66 percentage points.
+
+Candidate misses are identical across models because every model scores the same
+candidate sets: 13,325 training points (6.39%) and 15 student-test points (0.08%)
+have no correct candidate. All accuracy figures measure agreement with point-level
+reference labels derived by route alignment.
+
+### Comparison across Phase 4 models
+
+| Metric | Distance baseline | Random Forest | HistGradientBoosting | MLP | SVM |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Validation Top-1 | 50.03% | **70.58%** | 70.30% | 70.22% | 69.19% |
+| Student-test Top-1 | 54.42% | **82.06%** | 80.65% | 81.44% | 77.09% |
+| Validation mean trip Top-1 | 57.57% | **80.13%** | 79.55% | 79.50% | 78.24% |
+| Validation Macro F1 | 77.53% | **89.57%** | 89.27% | 89.24% | 88.57% |
+| Validation log loss | 1.391 | 1.266 | 0.965 | **0.921** | 1.194 |
+| Student-test log loss | 0.991 | 0.598 | **0.559** | 0.585 | 0.864 |
+| Validation route continuity | 82.82% | **90.17%** | 89.48% | 89.74% | 88.48% |
+
+Bold marks the best learned model. The distance-baseline columns use the Phase 3
+training and student-test summaries.
+
+The Random Forest has the highest validation and student-test Top-1 and was the best model on 48 of 80 validation trips. It beat the MLP on 61 of 80 validation trips, so its small pooled lead is consistent. The MLP had the lowest validation log loss and a much smaller train-validation gap than the Random Forest, so its probabilities may be the better input to the connectivity-aware decoder. The SVM was the weakest learned model on Top-1 in both splits.
+
+### Validation by fold
+
+| Fold | Validation trips | GPS points | Distance | Random Forest | HistGradientBoosting | MLP | SVM |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 15 | 41,747 | 34.61% | **43.83%** | 43.37% | 43.49% | 42.85% |
+| 1 | 16 | 41,739 | 57.58% | 75.40% | 75.10% | **75.53%** | 72.96% |
+| 2 | 16 | 41,737 | 51.34% | **76.45%** | 75.84% | 75.85% | 75.23% |
+| 3 | 16 | 41,417 | 53.54% | 77.65% | **78.03%** | 77.65% | 76.93% |
+| 4 | 17 | 41,777 | 53.08% | **79.63%** | 79.24% | 78.63% | 78.04% |
+
+### Runtime and feature importance
+
+| Stage | MLP | SVM |
+| --- | ---: | ---: |
+| Fit all five validation models | 671.27 s | 623.28 s |
+| Score all validation trips | 3.76 s | 10.99 s |
+| Fit final model | 113.58 s | 161.41 s |
+| Score all 10 student-test trips | 0.39 s | 1.00 s |
+
+scikit-learn's MLP trains on a single CPU core, unlike the Random Forest, which
+uses every core. The SVM fit time includes the kernel approximation and the three
+calibration fits.
+
+- **MLP** top permutation importances (increase in candidate-row log loss): `distance_gap_m` (1.467), `distance_m` (0.258), `candidate_rank` (0.164), `heading_cos` (0.161).
+- **SVM** top permutation importances (increase in candidate-row log loss): `distance_gap_m` (0.422), `candidate_rank` (0.226), `distance_m` (0.150), `heading_cos` (0.111).
+
+MLP and SVM importances come from permuting each feature on a fixed 50,000-row
+sample of the final training rows. They are not directly comparable with the
+Random Forest's impurity-based importances.
+
+### Reproduce
+
+```powershell
+.venv\Scripts\python.exe -m unittest discover -s tests -v
+.venv\Scripts\python.exe scripts/train_mlp.py
+.venv\Scripts\python.exe scripts/train_svm.py
+```
+
+- [MLP configuration](configs/mlp.json) and [SVM configuration](configs/svm.json).
+- MLP: [validation summary](results/mlp/cv_summary.csv), [student-test summary](results/mlp/student_test_summary.csv), [comparison row](results/mlp/comparison_row.csv), and [saved model](models/mlp/README.md).
+- SVM: [validation summary](results/svm/cv_summary.csv), [student-test summary](results/svm/student_test_summary.csv), [comparison row](results/svm/comparison_row.csv), and [saved model](models/svm/README.md).
+
 ## Full pipeline, HMM decoding, API and UI
 
 PathSnap map-matches noisy GPS observations to directed road arcs. The data
