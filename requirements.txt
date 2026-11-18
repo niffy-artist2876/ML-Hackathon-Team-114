@@ -3,5 +3,5 @@ pandas
 matplotlib
 scipy
 seaborn
-sklearn
+scikit-learn
 hmmlearn
