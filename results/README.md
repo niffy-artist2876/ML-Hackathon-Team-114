@@ -49,3 +49,41 @@ handoff.
 The three `*_predictions.parquet` files contain candidate-level probabilities
 and selected arcs. They are generated artifacts and can be regenerated with
 `scripts/train_random_forest.py`.
+
+## Phase 4 MLP outputs
+
+- `mlp/cv_by_fold.csv`: fold sizes and training/inference timings.
+- `mlp/cv_by_trip.csv`: held-out metrics for each validation trip.
+- `mlp/cv_summary.csv`: pooled and trip-mean cross-validation metrics.
+- `mlp/train_fit_summary.csv`: in-sample final-fit metrics used to
+  inspect overfitting against cross-validation.
+- `mlp/student_test_by_trip.csv`: held-out metrics per student-test
+  trip.
+- `mlp/student_test_summary.csv`: final student-test metrics.
+- `mlp/comparison_row.csv`: model-comparison table row.
+- `mlp/feature_importance.csv`: final model permutation importances.
+- `mlp/run_metadata.json`: configuration, fold IDs, row counts, and
+  output inventory.
+
+The three `*_predictions.parquet` files contain candidate-level probabilities
+and selected arcs. They are generated artifacts and can be regenerated with
+`scripts/train_mlp.py`.
+
+## Phase 4 SVM outputs
+
+- `svm/cv_by_fold.csv`: fold sizes and training/inference timings.
+- `svm/cv_by_trip.csv`: held-out metrics for each validation trip.
+- `svm/cv_summary.csv`: pooled and trip-mean cross-validation metrics.
+- `svm/train_fit_summary.csv`: in-sample final-fit metrics used to
+  inspect overfitting against cross-validation.
+- `svm/student_test_by_trip.csv`: held-out metrics per student-test
+  trip.
+- `svm/student_test_summary.csv`: final student-test metrics.
+- `svm/comparison_row.csv`: model-comparison table row.
+- `svm/feature_importance.csv`: final model permutation importances.
+- `svm/run_metadata.json`: configuration, fold IDs, row counts, and
+  output inventory.
+
+The three `*_predictions.parquet` files contain candidate-level probabilities
+and selected arcs. They are generated artifacts and can be regenerated with
+`scripts/train_svm.py`.

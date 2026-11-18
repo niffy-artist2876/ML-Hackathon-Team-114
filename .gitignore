@@ -1,4 +1,8 @@
-﻿data/raw/
+data/raw/
+data/processed/
+results/models/
+results/predictions/
+results/maps/
 .env
 data/processed/
 data.zip
@@ -11,8 +15,15 @@ results/maps/
 *.h5
 # Large Phase 4 candidate-level prediction matrices; summaries remain tracked.
 results/random_forest/*_predictions.parquet
+results/hist_gradient_boosting/*_predictions.parquet
+results/mlp/*_predictions.parquet
+results/svm/*_predictions.parquet
+*.zip
+*.pdf
 __pycache__/
+.pytest_cache/
 .ipynb_checkpoints/
 venv/
 .venv/
 .venv_compat/
+.python-runtime/
