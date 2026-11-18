@@ -1,0 +1,41 @@
+{
+  "command": "python scripts/verify_data.py --extract",
+  "started_unix": 1794978606.2955523,
+  "elapsed_seconds": 18.72843647003174,
+  "partition_counts": {
+    "train": 80,
+    "student_test": 10
+  },
+  "allowed_archive_files_checked": 360,
+  "smoke_test": {
+    "partition": "train",
+    "trip_id": "00000001",
+    "shapes": {
+      "track": [
+        1315,
+        3
+      ],
+      "nodes": [
+        88809,
+        2
+      ],
+      "arcs": [
+        165790,
+        2
+      ],
+      "route": [
+        525,
+        1
+      ]
+    }
+  },
+  "file_errors": [],
+  "versions": {
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scipy": "1.17.1"
+  },
+  "script_sha256": "a7ecdc6645f5734418b8e42917108d52017f0b7da0e764e0126faeea54ac5ae9",
+  "loader_sha256": "891b90d91f73ba09801bf389c95688d38c4d06483a90dcccdab154c963a39380"
+}
