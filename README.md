@@ -14,18 +14,22 @@ for the validation and held-out scores.
 | HistGradientBoosting | 70.30% | 80.65% | 0.965 | **0.559** | 88.34% | [Section](#phase-4-histgradientboosting) |
 | MLP | 70.22% | 81.44% | **0.921** | 0.585 | 89.67% | [Section](#phase-4-mlp-and-svm) |
 | SVM | 69.19% | 77.09% | 1.194 | 0.864 | 89.38% | [Section](#phase-4-mlp-and-svm) |
-| ExtraTrees, classifier only¹ | 72.78% ± 3.22 | 76.55% | — | — | 85.29% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
-| ExtraTrees + HMM decoding¹ | — | 78.10% | — | — | 96.72% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
+| ExtraTrees, Bayesian-tuned, classifier only¹ | 74.10% ± 4.44 | 77.88% | — | — | 86.26% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
+| ExtraTrees, Bayesian-tuned + HMM decoding¹ | — | 78.71% | — | — | 97.83% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
 
 Validation uses the five fixed trip-level folds; student-test trips were scored
 once by each final model. Bold marks the best of the four Phase 4 models that
 share the Phase 3 candidates and evaluator. Lower log loss is better.
 
-¹ ExtraTrees comes from the separate full-pipeline branch. It uses its own
-candidate generation and evaluation script, so its numbers are not directly
-comparable: its validation Top-1 is the mean ± standard deviation across folds
-rather than point-weighted, its candidate miss rate differs (5.94% versus 6.39%),
-and its log loss is measured per candidate row, so it is omitted here.
+¹ ExtraTrees comes from the separate full-pipeline work. Its hyperparameters were
+chosen by Bayesian optimization (8 Optuna trials maximizing mean validation
+Top-1), and the validation figure is the best trial scored on the same folds, so it
+is optimistic. It is the mean ± standard deviation across folds rather than
+point-weighted. ExtraTrees also uses its own candidate set
+(2,837,039 training candidate rows versus 3,334,672) and measures log loss
+per candidate row, so its numbers are not directly comparable and its log loss is
+omitted. See `results/tables/extra_trees_bayesian_validation_summary.csv` and
+`results/logs/extra_trees_bayesian_best.json`.
 
 ## Reproduce on Windows (Python 3.11)
 
