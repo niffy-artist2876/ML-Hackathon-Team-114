@@ -44,11 +44,7 @@ labels, not independently verified point-level ground truth.
 The selected k=16 setting has 6.3934% training candidate misses, exceeding
 the configured 1% target. 23,268 training observations are farther than 50 m
 from their aligned reference segment. Visual alignment review is pending;
-do not treat this draft as approved training data. See `docs/data_stage.md`.
-
-AI assistance was used to implement and debug this data-stage work. Team
-members must review the logic, write their own interpretation and disclose
-assistance in the organisers' required format. No detector-evasion claim is made.
+do not treat this draft as approved training data. See `docs/data_stage.md`. 
 
 ## Phase 0-2 handoff for teammates
 
