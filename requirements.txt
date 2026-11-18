@@ -5,3 +5,5 @@ scipy
 seaborn
 scikit-learn
 hmmlearn
+folium
+pyproj
