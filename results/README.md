@@ -24,3 +24,9 @@ These committed files are evidence from the reproducible Phase 0-2 run.
 The local `data/raw/` and `data/processed/` trees are ignored and must be
 regenerated. Reference-containing Folium maps are not part of the Phase 0-2
 handoff.
+
+## Phase 3 evaluation outputs
+
+- `evaluation/distance_baseline_by_trip.csv`: per-trip distance-only scores.
+- `evaluation/distance_baseline_summary.csv`: partition-level aggregates.
+- `evaluation/run_config.json`: score method and metric configuration.

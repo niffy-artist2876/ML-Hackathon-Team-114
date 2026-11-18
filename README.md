@@ -81,3 +81,20 @@ until the team reviews the diagnostics. The local `data/raw/` and
 The next teammate should first review candidate misses and alignment, then
 build the Phase 3 candidate-grouped evaluation harness. Do not use student-test
 labels for training or model selection, and do not use `.route` in inference.
+
+## Phase 3 evaluation harness
+
+The first Phase 3 implementation is a reusable candidate-grouped evaluator.
+It currently evaluates a distance-only softmax baseline and can later accept
+scores from each trained model without changing the metric definitions.
+
+Run it after generating local processed tables:
+
+```powershell
+.venv\Scripts\python.exe -m unittest discover -s tests -v
+.venv\Scripts\python.exe scripts/evaluate_candidates.py
+```
+
+Outputs are written to `results/evaluation/`. The evaluator reports candidate
+miss rate, point-weighted and trip-mean Top-1 accuracy, candidate-row Macro F1,
+point log loss on covered points, route continuity, and mean selected rank.
