@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "candidate_method": "exact projected point-to-segment nearest k",
+  "candidate_settings": [
+    4,
+    8,
+    16
+  ],
+  "selected_k": 16,
+  "selection_partition": "train",
+  "target_train_miss_rate": 0.01,
+  "selection_rule": "smallest k at <=1% point-weighted misses; else minimum misses, smaller k tie-break",
+  "segment_index_spacing_m": 25,
+  "alignment": "monotone route-occurrence DP with Huber spatial loss",
+  "alignment_huber_delta_m": 25,
+  "heading_min_displacement_m": 3,
+  "motion_max_gap_s": 10,
+  "fold_file": "results/tables/train_trip_folds.csv",
+  "fold_sha256": "bf1556a8ecf2574159993a148ab1adee023d2d67436e7325f7607faea9c97265",
+  "seed": 0,
+  "manual_review_status": "pending",
+  "datum_assumption": "WGS84 longitude, latitude"
+}

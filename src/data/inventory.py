@@ -24,7 +24,7 @@ def build_inventory(root=DATA_ROOT, partitions=("train", "student_test")):
                 p = folder/f"{trip}.{ext}"
                 row[f"has_{ext}"] = p.exists()
                 row[f"size_{ext}_kb"] = round(p.stat().st_size / 1024, 1) if p.exists() else None
-                row[f"n_{ext}"] = count_lines(p) if p.exists else None
+                row[f"n_{ext}"] = count_lines(p) if p.exists() else None
             rows.append(row)
     return pd.DataFrame(rows)
 
