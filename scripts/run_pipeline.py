@@ -38,6 +38,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--radius-m", type=float, default=75.0)
     parser.add_argument("--max-candidates", type=int, default=20)
     parser.add_argument("--limit-trips", type=int)
+    parser.add_argument(
+        "--final-model",
+        choices=["logistic_regression", "random_forest", "extra_trees", "hist_gradient_boosting", "mlp"],
+        default="extra_trees",
+        help="Model exported for API inference; all five models are still compared.",
+    )
     return parser.parse_args()
 
 
@@ -125,12 +131,29 @@ def main() -> None:
         model.fit(X, y)
         rows.extend(fold_predictions)
         rows.append({"model": name, "fold": "full", "fit_seconds": time.perf_counter() - started})
-    pd.DataFrame(rows).to_csv(output / "tables" / "model_comparison.csv", index=False)
+    comparison = pd.DataFrame(rows)
+    comparison.to_csv(output / "tables" / "model_comparison.csv", index=False)
+    fold_rows = comparison[comparison["fold"] != "full"]
+    metric_columns = [
+        "top1_accuracy",
+        "candidate_miss_rate",
+        "route_continuity",
+        "macro_f1_candidate",
+        "log_loss_candidate",
+    ]
+    summary = fold_rows.groupby("model", as_index=False)[metric_columns].mean()
+    for column in metric_columns:
+        summary[f"{column}_percent"] = summary[column] * 100.0
+    summary.to_csv(output / "tables" / "model_summary_percentages.csv", index=False)
 
     tuning = run_bayesian_tuning(train, train_trips, args.data_root, output)
     (output / "logs" / "tuning_best.json").write_text(json.dumps(tuning, indent=2), encoding="utf-8")
 
-    final_model = ExtraTreesClassifier(n_estimators=250, n_jobs=-1, random_state=seed, class_weight="balanced")
+    final_model = models(seed)[args.final_model]
+    if args.final_model == "extra_trees":
+        final_model = ExtraTreesClassifier(
+            n_estimators=250, n_jobs=-1, random_state=seed, class_weight="balanced"
+        )
     final_model.fit(X, y)
     joblib.dump(
         {"model": final_model, "feature_columns": FEATURE_COLUMNS, "config": vars(args)},
@@ -159,6 +182,26 @@ def main() -> None:
                 }
             )
     pd.DataFrame(test_rows).to_csv(output / "tables" / "decoder_comparison.csv", index=False)
+    decoder = pd.DataFrame(test_rows)
+    extra_trees_percentages = {
+        "model": args.final_model,
+        "student_test_classifier_top1_percent": float(
+            decoder.loc[decoder["decoder"].eq("classifier_only"), "top1_accuracy"].mean() * 100
+        ),
+        "student_test_hmm_top1_percent": float(
+            decoder.loc[decoder["decoder"].eq("hmm"), "top1_accuracy"].mean() * 100
+        ),
+        "student_test_classifier_continuity_percent": float(
+            decoder.loc[decoder["decoder"].eq("classifier_only"), "route_continuity"].mean() * 100
+        ),
+        "student_test_hmm_continuity_percent": float(
+            decoder.loc[decoder["decoder"].eq("hmm"), "route_continuity"].mean() * 100
+        ),
+    }
+    (output / "logs" / "extra_trees_percentages.json").write_text(
+        json.dumps(extra_trees_percentages, indent=2), encoding="utf-8"
+    )
+    print(json.dumps(extra_trees_percentages, indent=2))
     (output / "logs" / "run_config.json").write_text(json.dumps(vars(args), indent=2, default=str), encoding="utf-8")
 
 
