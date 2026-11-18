@@ -9,6 +9,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import pandas as pd
 
 from src.predict import RoutePredictor
@@ -202,3 +203,9 @@ def predict(
     logger.info("trip_id=%s model=%s decoder=%s latency_ms=%s",
                 trip_id, model, decoder, result["metrics"]["latency_ms"])
     return result
+
+
+ui_dir = ROOT / "ui"
+if ui_dir.is_dir():
+    app.mount("/", StaticFiles(directory=str(ui_dir), html=True), name="ui")
+

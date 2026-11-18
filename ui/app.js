@@ -3,10 +3,15 @@
  * Human-designed, robust frontend architecture.
  */
 
+// Dynamic API origin detection for Wi-Fi / LAN multi-device access
+const detectedOrigin = (typeof window !== "undefined" && window.location.origin && window.location.origin.startsWith("http"))
+  ? window.location.origin
+  : "http://localhost:8000";
+
 // Application State
 const state = {
   activeView: "overview",
-  apiUrl: "http://localhost:8000",
+  apiUrl: detectedOrigin,
   trips: [],
   datasetInventory: [],
   selectedTripId: "00000000",
@@ -775,6 +780,9 @@ window.openTripInWorkspace = openTripInWorkspace;
 
 // Startup Sequence
 document.addEventListener("DOMContentLoaded", async () => {
+  if (dom.apiUrlInput && detectedOrigin) {
+    dom.apiUrlInput.value = detectedOrigin;
+  }
   initMap();
   initEvents();
   setupSearchAndFilters();
