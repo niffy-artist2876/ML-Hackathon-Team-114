@@ -9,6 +9,9 @@
 
 > **PathSnap** reconstructs true vehicle road routes from noisy, sampled GPS trajectories using metric spatial indexing, supervised candidate classification, and topology-constrained Hidden Markov Model (HMM) sequence decoding with dynamic programming (Viterbi).
 
+> [!IMPORTANT]
+> **Official Evaluator Test Phase Deliverables**: The benchmark report and matched predictions for the 10 reserved evaluator trips (`00000015`, `00000017`, `00000023`, `00000030`, `00000049`, `00000059`, `00000067`, `00000073`, `00000087`, `00000094`) are published in the dedicated [**`evaluator/`**](evaluator/) directory. See [**evaluator/README.md**](evaluator/README.md) for the complete breakdown.
+
 ---
 
 ### Team 114 — Project Members
@@ -148,10 +151,12 @@ Upon receipt of the official reserved evaluation trips (`evaluator_test.zip` con
 
 1. **Topology Enforcement**: Adding the HMM decoder cuts disconnected teleportation errors from **2,050 down to 161 (-92.1% drop)** and elevates route continuity from **88.58% to 98.59%**.
 2. **Robust Accuracy Across Diverse Geography**: HistGradientBoosting maintained high Trip-Mean Top-1 accuracy (**85.44%**) and **92.22% candidate macro F1** across all 10 held-out evaluation trips without any fine-tuning or threshold changes.
-3. **Reproducible Submission Files**:
-   - `results/evaluator_test/evaluator_test_summary.csv` — Aggregated benchmark metrics
-   - `results/evaluator_test/evaluator_test_by_trip.csv` — Detailed trip-level metrics across all 10 trips
-   - `results/evaluator_test/evaluator_test_predictions.csv` — Exact arc ID predictions for every GPS observation
+3. **Official Evaluator Deliverables (Dedicated `evaluator/` Folder)**:
+   - [`evaluator/README.md`](evaluator/README.md) — Dedicated benchmark report & granular 10-trip breakdown
+   - [`evaluator/predictions.csv`](evaluator/predictions.csv) — Exact arc ID predictions for every GPS observation (19,674 rows)
+   - [`evaluator/summary.csv`](evaluator/summary.csv) — Aggregated benchmark metrics for all models and decoders
+   - [`evaluator/by_trip.csv`](evaluator/by_trip.csv) — Detailed trip-level metrics across all 10 trips
+   - `results/evaluator_test/` — Raw evaluation output tables & logs
 
 ---
 
@@ -250,6 +255,11 @@ ML-Hackathon-Team-114/
 │   ├── data_stage.md              # Data verification and spatial geometry specs
 │   ├── model_stage.md             # Model evaluation protocols
 │   └── images/                    # Verified dashboard & telemetry screenshots
+├── evaluator/                     # Official Hackathon Evaluator Test Submission Folder
+│   ├── README.md                  # Dedicated evaluator benchmark report & per-trip breakdown
+│   ├── predictions.csv            # 19,674 predicted road arc IDs
+│   ├── summary.csv                # Macro-level benchmark summary
+│   └── by_trip.csv                # 10-trip granular performance breakdown
 ├── models/
 │   ├── final_model/               # Production HistGradientBoosting (377 KB)
 │   │   ├── model.joblib
