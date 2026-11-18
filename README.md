@@ -98,3 +98,31 @@ Run it after generating local processed tables:
 Outputs are written to `results/evaluation/`. The evaluator reports candidate
 miss rate, point-weighted and trip-mean Top-1 accuracy, candidate-row Macro F1,
 point log loss on covered points, route continuity, and mean selected rank.
+
+## Phase 4 Random Forest
+
+The first Phase 4 model is a candidate-level Random Forest classifier. Each
+candidate row is labelled `1` when it is the aligned route arc and `0`
+otherwise. The model uses the shared candidate feature list and the existing
+fixed trip-level folds. It never trains on `student_test`; that partition is
+scored only after the final model is fitted on all labelled training trips.
+
+Run the complete cross-validation, final fit, and student-test evaluation:
+
+```powershell
+.venv_compat\Scripts\python.exe -m unittest discover -s tests -v
+.venv_compat\Scripts\python.exe scripts/train_random_forest.py
+```
+
+The run writes `results/random_forest/` containing fold metrics, per-trip
+validation metrics, candidate probabilities, feature importance, comparison
+metrics, and student-test predictions. The fitted compressed model artifact is
+written to `models/random_forest/random_forest_compressed9.joblib` and is
+stored with Git LFS for team handoff.
+
+The most important comparison files are:
+
+- `cv_summary.csv`: pooled and trip-mean cross-validation metrics.
+- `student_test_summary.csv`: final held-out evaluation metrics.
+- `comparison_row.csv`: one row ready to merge into the team comparison table.
+- `feature_importance.csv`: final Random Forest feature importances.
