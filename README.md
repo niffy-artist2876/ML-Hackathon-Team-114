@@ -48,3 +48,36 @@ do not treat this draft as approved training data. See `docs/data_stage.md`.
 AI assistance was used to implement and debug this data-stage work. Team
 members must review the logic, write their own interpretation and disclose
 assistance in the organisers' required format. No detector-evasion claim is made.
+
+## Phase 0-2 handoff for teammates
+
+This branch is the handoff point for the first three phases of the project:
+
+- Phase 0: reproducible environment setup and raw-data verification.
+- Phase 1: data-quality, geometry, route-alignment, and candidate diagnostics.
+- Phase 2: model-ready candidate features, labels, baseline predictions, and
+  trip-level cross-validation folds.
+
+It intentionally does not contain model training, Bayesian optimization,
+HMM/Viterbi decoding, the API, or the UI. Those are Phase 3+ work. Follow
+`docs/phase_0_2_handoff.md` for the exact continuation checklist.
+
+The fresh run checked 360 files across 80 training trips and 10 student-test
+trips with no file errors. It processed 208,417 training observations and
+19,160 student-test observations. The data-stage tests pass in the prepared
+environment.
+
+The selected `k=16` candidate set still misses 6.3934% of training reference
+arcs, and 23,268 training observations are more than 50 m from their aligned
+reference segment. These derived labels are not approved final training data
+until the team reviews the diagnostics. The local `data/raw/` and
+`data/processed/` directories are ignored and must be regenerated with:
+
+```powershell
+.venv\Scripts\python.exe scripts/verify_data.py --extract
+.venv\Scripts\python.exe scripts/run_data_stage.py
+```
+
+The next teammate should first review candidate misses and alignment, then
+build the Phase 3 candidate-grouped evaluation harness. Do not use student-test
+labels for training or model selection, and do not use `.route` in inference.

@@ -1,7 +1,7 @@
 {
   "command": "python scripts/verify_data.py --extract",
-  "started_unix": 1794978606.2955523,
-  "elapsed_seconds": 18.72843647003174,
+  "started_unix": 1794982514.783528,
+  "elapsed_seconds": 5.550622224807739,
   "partition_counts": {
     "train": 80,
     "student_test": 10
@@ -36,6 +36,6 @@
     "pandas": "3.0.6",
     "scipy": "1.17.1"
   },
-  "script_sha256": "a7ecdc6645f5734418b8e42917108d52017f0b7da0e764e0126faeea54ac5ae9",
+  "script_sha256": "05ac216b3838583cb8cdc8261f11c4f5a7e8b58f19e521cd36fba1c1713b2743",
   "loader_sha256": "891b90d91f73ba09801bf389c95688d38c4d06483a90dcccdab154c963a39380"
 }
