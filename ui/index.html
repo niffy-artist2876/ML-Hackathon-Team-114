@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PathSnap map matching</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>PathSnap</h1>
+      <p>Choose a student-test trip to request its server-side route prediction.</p>
+      <label for="api-url">API URL</label>
+      <input id="api-url" value="http://localhost:8000" />
+      <label for="trip-select">Trip</label>
+      <select id="trip-select"></select>
+      <button id="load-button">Predict route</button>
+      <pre id="status" aria-live="polite">Connecting…</pre>
+      <section id="result" hidden>
+        <h2>Prediction</h2>
+        <p id="summary"></p>
+        <div id="route"></div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

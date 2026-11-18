@@ -1,0 +1,14 @@
+numpy
+pandas
+matplotlib
+scipy
+seaborn
+scikit-learn
+hmmlearn
+pyproj
+optuna
+joblib
+fastapi
+uvicorn
+folium
+pyarrow

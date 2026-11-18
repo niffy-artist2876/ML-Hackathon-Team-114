@@ -1,0 +1,8 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; }
+body { margin: 0; background: #f4f7fb; color: #182230; }
+main { max-width: 760px; margin: 3rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 8px 30px #14213d18; }
+label, input, select, button { display: block; width: 100%; box-sizing: border-box; margin: .45rem 0 1rem; }
+input, select, button { padding: .7rem; border: 1px solid #b7c4d6; border-radius: 6px; font: inherit; }
+button { color: white; background: #155eef; cursor: pointer; }
+pre { white-space: pre-wrap; background: #eef3fa; padding: .8rem; border-radius: 6px; }
+#route { max-height: 16rem; overflow: auto; word-break: break-word; }
