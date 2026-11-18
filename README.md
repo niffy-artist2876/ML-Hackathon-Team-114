@@ -3,7 +3,7 @@
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-2.5.0-009688.svg)](https://fastapi.tiangolo.com/)
 [![Leaflet](https://img.shields.io/badge/Leaflet.js-Geospatial-green.svg)](https://leafletjs.com/)
-[![Unit Tests](https://img.shields.io/badge/tests-37%20passed-brightgreen.svg)]()
+[![Unit Tests](https://img.shields.io/badge/tests-38%20passed-brightgreen.svg)]()
 [![Model Winner](https://img.shields.io/badge/winner-HistGradientBoosting-orange.svg)]()
 [![Continuity](https://img.shields.io/badge/HMM%20Continuity-99.32%25-success.svg)]()
 
@@ -11,8 +11,20 @@
 
 ---
 
+### Team 114 — Project Members
+
+| SRN | Name | Core Responsibilities & Contributions |
+| :--- | :--- | :--- |
+| `PES1UG24CS437` | **SHAURYA SINGH** | Phase 4 MLP & SVM candidate models, probability calibration, kernel configurations |
+| `PES1UG24CS438` | **SHISHIR HEGDE** | Data quality assurance, spatial reference alignment, network topology diagnostics |
+| `PES1UG24CS486` | **SUSHRUTH SUKESH** | Random Forest modeling, Bayesian hyperparameter tuning, experiment reproducibility |
+| `PES1UG24CS487` | **SWARA ASHISH POTDAR** | HistGradientBoosting production winner, Phase 5 HMM / Viterbi decoding, UI & API Gateway |
+
+---
+
 ## Table of Contents
 
+- [Team 114 — Project Members](#team-114--project-members)
 - [System Architecture](#system-architecture)
 - [Interactive Geospatial UI & Workspace](#interactive-geospatial-ui--workspace)
 - [Official Six-Model Benchmark Results](#official-six-model-benchmark-results)
@@ -275,5 +287,5 @@ All 37 unit tests verify feature schema stability, projection accuracy, Viterbi 
 ```
 
 ```text
-37 passed in 18.40s (100% test coverage)
+38 passed in 17.97s (100% test coverage)
 ```
