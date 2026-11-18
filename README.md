@@ -5,6 +5,28 @@ data verification, candidate generation, a distance-only baseline, and the
 Phase 4 Random Forest. See the [Random Forest results](#random-forest-results)
 for the validation and held-out scores.
 
+## Model comparison
+
+| Model | Validation Top-1 | Student-test Top-1 | Validation log loss | Student-test log loss | Student-test route continuity | Details |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Distance baseline (Phase 3) | 50.03% | 54.42% | 1.391 | 0.991 | 82.03% | [Section](#phase-3-evaluation-harness) |
+| Random Forest | **70.58%** | **82.06%** | 1.266 | 0.598 | **90.18%** | [Section](#phase-4-random-forest) |
+| HistGradientBoosting | 70.30% | 80.65% | 0.965 | **0.559** | 88.34% | [Section](#phase-4-histgradientboosting) |
+| MLP | 70.22% | 81.44% | **0.921** | 0.585 | 89.67% | [Section](#phase-4-mlp-and-svm) |
+| SVM | 69.19% | 77.09% | 1.194 | 0.864 | 89.38% | [Section](#phase-4-mlp-and-svm) |
+| ExtraTrees, classifier only¹ | 72.78% ± 3.22 | 76.55% | — | — | 85.29% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
+| ExtraTrees + HMM decoding¹ | — | 78.10% | — | — | 96.72% | [Section](#full-pipeline-hmm-decoding-api-and-ui) |
+
+Validation uses the five fixed trip-level folds; student-test trips were scored
+once by each final model. Bold marks the best of the four Phase 4 models that
+share the Phase 3 candidates and evaluator. Lower log loss is better.
+
+¹ ExtraTrees comes from the separate full-pipeline branch. It uses its own
+candidate generation and evaluation script, so its numbers are not directly
+comparable: its validation Top-1 is the mean ± standard deviation across folds
+rather than point-weighted, its candidate miss rate differs (5.94% versus 6.39%),
+and its log loss is measured per candidate row, so it is omitted here.
+
 ## Reproduce on Windows (Python 3.11)
 
 ```powershell
