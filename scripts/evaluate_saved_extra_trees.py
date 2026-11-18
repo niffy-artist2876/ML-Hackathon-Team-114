@@ -8,6 +8,7 @@ it is never passed to model fitting.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import sys
 from pathlib import Path
@@ -133,6 +134,26 @@ def main() -> None:
             validation_summary.to_csv(
                 output / "tables" / "extra_trees_validation_summary.csv", index=False
             )
+    trials_path = output / "tables" / "extra_trees_bayesian_trials.csv"
+    if trials_path.is_file():
+        trials = pd.read_csv(trials_path)
+        best = trials.loc[trials["value"].idxmax()]
+        fold_scores = np.asarray(ast.literal_eval(best["user_attrs_fold_top1"]), dtype=float)
+        pd.DataFrame({
+            "fold": np.arange(len(fold_scores)),
+            "top1_accuracy": fold_scores,
+            "top1_percent": fold_scores * 100.0,
+        }).to_csv(output / "tables" / "extra_trees_bayesian_validation_by_fold.csv", index=False)
+        pd.DataFrame([{
+            "metric": "top1_accuracy",
+            "mean": float(fold_scores.mean()),
+            "std": float(fold_scores.std(ddof=1)),
+            "mean_percent": float(fold_scores.mean() * 100.0),
+            "std_percent": float(fold_scores.std(ddof=1) * 100.0),
+            "best_trial": int(best["number"]),
+        }]).to_csv(
+            output / "tables" / "extra_trees_bayesian_validation_summary.csv", index=False
+        )
     payload = {
         "model": "extra_trees",
         "partition": args.partition,
