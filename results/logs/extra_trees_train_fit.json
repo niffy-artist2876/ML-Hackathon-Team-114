@@ -1,0 +1,9 @@
+{
+  "model": "extra_trees",
+  "partition": "train",
+  "trips": 80,
+  "classifier_only_top1_percent": 94.11505232901953,
+  "hmm_top1_percent": 94.11505232901953,
+  "classifier_only_route_continuity_percent": 90.43264847878436,
+  "hmm_route_continuity_percent": 93.23882458668426
+}
