@@ -1,0 +1,9 @@
+{
+  "model": "extra_trees",
+  "partition": "student_test",
+  "trips": 10,
+  "classifier_only_top1_percent": 76.55168642519727,
+  "hmm_top1_percent": 78.09504488735749,
+  "classifier_only_route_continuity_percent": 85.29243750222987,
+  "hmm_route_continuity_percent": 96.72216334311642
+}
