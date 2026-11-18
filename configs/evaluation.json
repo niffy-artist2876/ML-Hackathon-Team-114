@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "score_method": "distance_softmax",
+  "temperature_m": 5.0,
+  "partitions": [
+    "train",
+    "student_test"
+  ],
+  "metrics": [
+    "candidate_miss_rate",
+    "top1_accuracy",
+    "candidate_macro_f1",
+    "point_log_loss",
+    "route_continuity",
+    "mean_selected_rank"
+  ]
+}

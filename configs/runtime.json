@@ -1,0 +1,7 @@
+{
+  "host": "0.0.0.0",
+  "port": 8000,
+  "artifact": "results/models/final_extra_trees.joblib",
+  "data_root": "data/raw",
+  "ui_origin": "*"
+}

@@ -1,0 +1,37 @@
+{
+  "model_name": "HistGradientBoostingClassifier",
+  "pipeline_steps": [
+    "imputer",
+    "classifier"
+  ],
+  "feature_count": 13,
+  "features": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "target": "is_correct",
+  "evaluation_metrics": {
+    "cv_trip_mean_top1": 0.795543,
+    "cv_route_continuity": 0.894761,
+    "cv_point_log_loss": 0.965084,
+    "cv_candidate_macro_f1": 0.892730,
+    "student_test_trip_mean_top1": 0.827247,
+    "student_test_route_continuity": 0.883439,
+    "student_test_point_log_loss": 0.559058,
+    "student_test_candidate_macro_f1": 0.907991
+  },
+  "training_time_seconds": 4.72,
+  "inference_latency_seconds_10_trips": 0.30,
+  "model_size_bytes": 377865
+}

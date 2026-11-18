@@ -222,6 +222,7 @@ function initMap() {
   state.layers.route = L.featureGroup().addTo(state.map);
   state.layers.truthRoute = L.featureGroup().addTo(state.map);
   state.layers.candidates = L.featureGroup().addTo(state.map);
+  state.layers.candidateHighlight = L.featureGroup().addTo(state.map);
   state.layers.milestones = L.featureGroup().addTo(state.map);
   state.layers.highlight = L.featureGroup().addTo(state.map);
 }
@@ -273,6 +274,7 @@ function renderMatchedTrip(data) {
   state.layers.route.clearLayers();
   state.layers.truthRoute.clearLayers();
   state.layers.candidates.clearLayers();
+  state.layers.candidateHighlight.clearLayers();
   state.layers.milestones.clearLayers();
   state.layers.highlight.clearLayers();
 
@@ -284,15 +286,35 @@ function renderMatchedTrip(data) {
   const endCoord = data.end_coord;
 
   // 1. Candidate Road Segments Layer (Ochre #F3B034 with dashed lines)
+  const drawnCandidateArcs = new Set();
   if (candGeoms.length > 0) {
     candGeoms.forEach((item) => {
-      const line = L.polyline(item.geometry, {
-        color: "#F3B034",
-        weight: 2.5,
-        opacity: 0.55,
-        dashArray: "4, 4",
-      }).bindTooltip(`Candidate Arc #${item.arc_id}`, { direction: "center" });
-      state.layers.candidates.addLayer(line);
+      if (!drawnCandidateArcs.has(item.arc_id)) {
+        drawnCandidateArcs.add(item.arc_id);
+        const line = L.polyline(item.geometry, {
+          color: "#F3B034",
+          weight: 3.5,
+          opacity: 0.75,
+          dashArray: "5, 5",
+        }).bindTooltip(`Candidate Arc #${item.arc_id}`, { direction: "center" });
+        state.layers.candidates.addLayer(line);
+      }
+    });
+  } else if (data.candidates_sample && data.candidates_sample.length > 0) {
+    // Fallback: extract candidate geometries from candidate sample
+    data.candidates_sample.forEach((s) => {
+      (s.candidates || []).forEach((c) => {
+        if (c.geometry && !drawnCandidateArcs.has(c.arc_id)) {
+          drawnCandidateArcs.add(c.arc_id);
+          const line = L.polyline(c.geometry, {
+            color: "#F3B034",
+            weight: 3.5,
+            opacity: 0.75,
+            dashArray: "5, 5",
+          }).bindTooltip(`Candidate Arc #${c.arc_id} (${(c.prob * 100).toFixed(1)}%)`, { direction: "center" });
+          state.layers.candidates.addLayer(line);
+        }
+      });
     });
   }
 
@@ -301,8 +323,8 @@ function renderMatchedTrip(data) {
     truthGeom.forEach((segment) => {
       const line = L.polyline(segment, {
         color: "#10B981",
-        weight: 4.5,
-        opacity: 0.9,
+        weight: 5.5,
+        opacity: 0.95,
         dashArray: "8, 6",
         lineCap: "round",
       }).bindTooltip("Ground Truth (.route) Road Segment", { direction: "center" });
@@ -450,13 +472,13 @@ function inspectObservation(sampleItem) {
       </div>
     `;
 
-    // Click candidate card to highlight candidate road segment
+    // Hover candidate card to highlight candidate road segment
     if (c.geometry) {
       card.addEventListener("mouseenter", () => {
         highlightCandidateRoad(c.geometry, c.arc_id);
       });
       card.addEventListener("mouseleave", () => {
-        state.layers.candidates.clearLayers();
+        state.layers.candidateHighlight.clearLayers();
       });
     }
 
@@ -465,15 +487,14 @@ function inspectObservation(sampleItem) {
 }
 
 function highlightCandidateRoad(geometry, arcId) {
-  state.layers.candidates.clearLayers();
+  state.layers.candidateHighlight.clearLayers();
   if (!geometry) return;
   const line = L.polyline(geometry, {
-    color: "#C6806A",
-    weight: 6,
-    opacity: 0.9,
-    dashArray: "6, 6",
-  }).bindTooltip(`Candidate Arc #${arcId}`, { permanent: false, direction: "center" });
-  state.layers.candidates.addLayer(line);
+    color: "#AC3704",
+    weight: 6.5,
+    opacity: 0.95,
+  }).bindTooltip(`Highlighted Candidate Arc #${arcId}`, { permanent: false, direction: "center" });
+  state.layers.candidateHighlight.addLayer(line);
 }
 
 function inspectBasicPoint(idx, pt) {

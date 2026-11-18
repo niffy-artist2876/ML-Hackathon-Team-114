@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "model_family": "logistic_regression",
+  "hyperparameters": {
+    "C": 1.0,
+    "solver": "lbfgs",
+    "max_iter": 300,
+    "class_weight": "balanced",
+    "random_state": 42
+  },
+  "scaling": "StandardScaler",
+  "feature_columns": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "excluded_columns": [
+    "trip_id",
+    "point_idx",
+    "arc_id",
+    "label"
+  ],
+  "folds_file": "results/tables/train_trip_folds.csv",
+  "train_trips_count": 80,
+  "student_test_trips_count": 10,
+  "evaluation_temperature_m": 5.0
+}
