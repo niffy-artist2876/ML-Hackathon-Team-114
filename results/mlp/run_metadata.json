@@ -1,0 +1,95 @@
+{
+  "config": {
+    "schema_version": 1,
+    "model": "mlp",
+    "algorithm_family": "feedforward_neural_network",
+    "feature_columns": [
+      "distance_m",
+      "distance_gap_m",
+      "candidate_rank",
+      "arc_length_m",
+      "projection_fraction",
+      "heading_cos",
+      "heading_valid",
+      "speed_mps",
+      "speed_valid",
+      "time_gap_s",
+      "large_gap",
+      "from_out_degree",
+      "to_out_degree"
+    ],
+    "folds_path": "results/tables/train_trip_folds.csv",
+    "partitions": [
+      "train",
+      "student_test"
+    ],
+    "model_parameters": {
+      "hidden_layer_sizes": [
+        64,
+        32
+      ],
+      "activation": "relu",
+      "alpha": 0.0001,
+      "batch_size": 512,
+      "learning_rate_init": 0.001,
+      "max_iter": 50,
+      "early_stopping": true,
+      "validation_fraction": 0.1,
+      "n_iter_no_change": 5,
+      "random_state": 42
+    },
+    "max_negative_candidates_per_point": 4,
+    "feature_importance": {
+      "sample_rows": 50000,
+      "n_repeats": 3
+    },
+    "outputs": {
+      "directory": "results/mlp",
+      "model_path": "models/mlp/mlp_compressed9.joblib",
+      "model_compression": 9
+    }
+  },
+  "resolved_feature_columns": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "train_trips": 80,
+  "student_test_trips": 10,
+  "train_candidate_rows_before_sampling": 3334672,
+  "train_candidate_rows_used": 1028760,
+  "max_negative_candidates_per_point": 4,
+  "fold_ids": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "feature_importance_method": "permutation importance, candidate-row log loss",
+  "model_path": "models/mlp/mlp_compressed9.joblib",
+  "outputs": [
+    "comparison_row.csv",
+    "cv_by_fold.csv",
+    "cv_by_trip.csv",
+    "cv_predictions.parquet",
+    "cv_summary.csv",
+    "feature_importance.csv",
+    "student_test_by_trip.csv",
+    "student_test_predictions.parquet",
+    "student_test_summary.csv",
+    "train_fit_by_trip.csv",
+    "train_fit_predictions.parquet",
+    "train_fit_summary.csv"
+  ]
+}
