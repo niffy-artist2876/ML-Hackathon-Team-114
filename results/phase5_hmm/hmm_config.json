@@ -1,0 +1,27 @@
+{
+  "model": "HistGradientBoostingClassifier",
+  "classifier_artifact": "models\\final_model\\model.joblib",
+  "features": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "hmm_parameters": {
+    "transition_penalty": -4.0,
+    "emission_weight": 1.0,
+    "large_gap_penalty": 0.0
+  },
+  "normalization": "group_normalized_softmax_log_emissions",
+  "connectivity_rule": "arcs[prev, to_node] == arcs[curr, from_node] or prev == curr",
+  "large_gap_threshold_seconds": 30.0
+}

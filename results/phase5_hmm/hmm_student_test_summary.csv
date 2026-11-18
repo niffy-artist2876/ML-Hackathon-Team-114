@@ -1,0 +1,3 @@
+partition,decoder,trips,point_count,covered_points,candidate_miss_rate,point_weighted_top1,trip_mean_top1,route_continuity,trip_mean_route_continuity,candidate_macro_f1,disconnected_transitions,evaluated_transitions,total_disagreements,disagreement_rate_percent,total_inference_seconds
+student_test,classifier_only,10,19160,19145,0.0007828810020876827,0.8066283924843424,0.827612226711563,0.883289817232376,0.8837937921518562,0.9081858570931898,2235,19150,0,0.0,40.74112250001417
+student_test,classifier_plus_hmm,10,19160,19145,0.0007828810020876827,0.8462421711899791,0.8673737832546454,0.9931592689295039,0.9910665216293333,0.9293999271065865,131,19150,1865,9.733820459290188,40.74112250001417

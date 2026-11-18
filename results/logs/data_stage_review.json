@@ -1,0 +1,95 @@
+{
+  "elapsed_seconds": 74.00770425796509,
+  "command": ".venv/Scripts/python.exe scripts/review_data_stage.py",
+  "original_outputs_hash_checked": 369,
+  "original_output_hash_failures": [],
+  "raw_files_hash_checked": 360,
+  "raw_hash_failures": [],
+  "source_status_vs_original_run": {
+    "src\\data\\features.py": "identical",
+    "src\\data\\geometry.py": "identical",
+    "src\\data\\loader.py": "identical",
+    "src\\data\\reference.py": "identical",
+    "src\\data\\visualize.py": "changed",
+    "scripts\\run_data_stage.py": "identical",
+    "scripts\\verify_data.py": "identical"
+  },
+  "all_90_trip_labels_predictions_and_metrics_verified": true,
+  "exact_raw_replay_trips": [
+    "00000001",
+    "00000069",
+    "00000090"
+  ],
+  "inference_route_and_processed_reads_blocked_on_replay": true,
+  "independent_full_network_distance_checks": [
+    {
+      "trip_id": "00000054",
+      "brute_force_points_checked": 81,
+      "network_distance_median_m": 84.15852721362786,
+      "network_distance_p95_m": 100.66378058207921,
+      "longest_off_network_run_points": 6036,
+      "longest_off_network_run_duration_s": 6037.0,
+      "longest_off_network_run_extent_m": 175.30789856240997
+    },
+    {
+      "trip_id": "00000033",
+      "brute_force_points_checked": 81,
+      "network_distance_median_m": 6.99837557088736,
+      "network_distance_p95_m": 30.206245419786068,
+      "longest_off_network_run_points": 41,
+      "longest_off_network_run_duration_s": 42.0,
+      "longest_off_network_run_extent_m": 39.36051896040977
+    },
+    {
+      "trip_id": "00000066",
+      "brute_force_points_checked": 83,
+      "network_distance_median_m": 6.188464456303566,
+      "network_distance_p95_m": 25.027200987119326,
+      "longest_off_network_run_points": 49,
+      "longest_off_network_run_duration_s": 48.0,
+      "longest_off_network_run_extent_m": 25.803512146990283
+    }
+  ],
+  "folds_check": "80 unique training trips in 5 folds; no student-test trips",
+  "evidence_totals": {
+    "student_test": {
+      "points": 19160,
+      "far_points": 27,
+      "near_other_reference_arc": 0,
+      "near_network_but_not_reference": 27,
+      "far_from_entire_network": 0,
+      "far_immediately_after_gap_over10s": 0,
+      "far_adjacent_to_gap_over10s": 0,
+      "far_on_trip_with_route_endpoint_break": 0,
+      "route_endpoint_breaks": 1,
+      "max_gap_s": 210.0
+    },
+    "train": {
+      "points": 208417,
+      "far_points": 23268,
+      "near_other_reference_arc": 692,
+      "near_network_but_not_reference": 4346,
+      "far_from_entire_network": 18230,
+      "far_immediately_after_gap_over10s": 18,
+      "far_adjacent_to_gap_over10s": 37,
+      "far_on_trip_with_route_endpoint_break": 4357,
+      "route_endpoint_breaks": 13,
+      "max_gap_s": 153064.0
+    }
+  },
+  "baseline_recomputed": {
+    "student_test": {
+      "points": 19160,
+      "correct": 10426,
+      "point_weighted_top1": 0.5441544885177453
+    },
+    "train": {
+      "points": 208417,
+      "correct": 104263,
+      "point_weighted_top1": 0.5002614949836146
+    }
+  },
+  "review_script_sha256": "7ba22bbe4e0605aa41d801936f4ae6a888a7b103175bdd47edf90d9fb3b52f06",
+  "browser_review": "not performed; inspect regenerated local HTML or static maps",
+  "scope": "No labels altered; explicit train/student_test input paths only. Logs do not prove all historical external access."
+}

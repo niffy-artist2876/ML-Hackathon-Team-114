@@ -1,0 +1,103 @@
+{
+  "model_family": "logistic_regression",
+  "timestamp_utc": "2026-11-18 07:24:33",
+  "hyperparameters": {
+    "C": 1.0,
+    "solver": "lbfgs",
+    "max_iter": 300,
+    "class_weight": "balanced",
+    "random_state": 42
+  },
+  "features": [
+    "distance_m",
+    "distance_gap_m",
+    "candidate_rank",
+    "arc_length_m",
+    "projection_fraction",
+    "heading_cos",
+    "heading_valid",
+    "speed_mps",
+    "speed_valid",
+    "time_gap_s",
+    "large_gap",
+    "from_out_degree",
+    "to_out_degree"
+  ],
+  "excluded_columns": [
+    "trip_id",
+    "point_idx",
+    "arc_id",
+    "label"
+  ],
+  "timings_seconds": {
+    "data_loading": 1.813891199999489,
+    "cross_validation_total": 115.67848839999897,
+    "cv_fit_sum": 62.50479330000417,
+    "cv_val_sum": 50.387493500000346,
+    "final_model_fit": 8.392705600001136,
+    "train_evaluation": 21.068501700001434,
+    "student_test_evaluation": 1.8991234000004624,
+    "total_execution": 149.28969250000046
+  },
+  "cv_summary": {
+    "partition": "train",
+    "trips": 80,
+    "points": 208417,
+    "covered_points": 195092,
+    "candidate_miss_rate": 0.06393432397549144,
+    "top1_accuracy": 0.6589673587087426,
+    "trip_mean_top1_accuracy": 0.7416396957467866,
+    "trip_mean_candidate_macro_f1": 0.8639228149617237,
+    "point_mean_log_loss": 1.3554594652515506,
+    "route_continuity": 0.8855482870992121,
+    "trip_mean_route_continuity": 0.8647489484026789,
+    "mean_selected_rank": 1.490389426133867,
+    "fit_seconds_total": 62.50479330000417,
+    "val_seconds_total": 50.387493500000346
+  },
+  "final_train_summary": {
+    "partition": "train",
+    "trips": 80,
+    "points": 208417,
+    "covered_points": 195092,
+    "candidate_miss_rate": 0.06393432397549144,
+    "top1_accuracy": 0.6654207670199648,
+    "trip_mean_top1_accuracy": 0.7483162987594915,
+    "trip_mean_candidate_macro_f1": 0.8674837353252915,
+    "point_mean_log_loss": 1.0330678208100015,
+    "route_continuity": 0.88780584075823,
+    "trip_mean_route_continuity": 0.8683109297550835,
+    "mean_selected_rank": 1.4786390295498595
+  },
+  "student_test_summary": {
+    "partition": "student_test",
+    "trips": 10,
+    "points": 19160,
+    "covered_points": 19145,
+    "candidate_miss_rate": 0.0007828810020876827,
+    "top1_accuracy": 0.7708768267223383,
+    "trip_mean_top1_accuracy": 0.7863169971334114,
+    "trip_mean_candidate_macro_f1": 0.88615512994767,
+    "point_mean_log_loss": 0.7696986216231962,
+    "route_continuity": 0.8948909689902212,
+    "trip_mean_route_continuity": 0.8900671264492818,
+    "mean_selected_rank": 1.480551074248688,
+    "eval_seconds": 1.8991234000004624
+  },
+  "coefficients": {
+    "distance_m": 3.4947429271880646,
+    "distance_gap_m": -11.794860365631257,
+    "candidate_rank": -1.7544140616609212,
+    "arc_length_m": 0.23293267588984676,
+    "projection_fraction": 0.35607544145560166,
+    "heading_cos": 0.9062094260577567,
+    "heading_valid": -0.024555980434743645,
+    "speed_mps": -0.14445306022773566,
+    "speed_valid": -0.00025959323092973597,
+    "time_gap_s": -0.0004008536941166002,
+    "large_gap": 0.002711961460564654,
+    "from_out_degree": -0.1683541876742367,
+    "to_out_degree": 0.34721544971361323
+  },
+  "intercept": -5.836431042339854
+}

@@ -1,0 +1,16 @@
+{
+  "timestamp_utc": "2026-11-18T11:49:01.087495+00:00",
+  "training_trips": 80,
+  "validation_folds": 5,
+  "student_test_trips": 10,
+  "cv_point_weighted_top1_clf": 0.7632294870380055,
+  "cv_point_weighted_top1_hmm": 0.7948391925802598,
+  "cv_trip_mean_top1_clf": 0.8097229371822184,
+  "cv_trip_mean_top1_hmm": 0.8518510689846268,
+  "cv_continuity_clf": 0.8898707382750064,
+  "cv_continuity_hmm": 0.9913841516389311,
+  "test_trip_mean_top1_clf": 0.827612226711563,
+  "test_trip_mean_top1_hmm": 0.8673737832546454,
+  "test_continuity_clf": 0.883289817232376,
+  "test_continuity_hmm": 0.9931592689295039
+}
